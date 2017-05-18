@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>What's Up</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+        <h5 style="text-align: right"><a href="/logout">Logout</a></h5>
+        <br>
+        <h5>Successfully logged in! Welcome, <b>{{user.name}} !</b></h5>
+        {% if messages %}
+            <ul class="messages">
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    <br>
+    <div class="container">
+        <h4>Here is your Appointment for today, &nbsp {{time}} :</h4>
+        <table>
+            <thead>
+                <th>Task</th>
+                <th>Time</th>
+                <th>Status</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                <!-- {{today_appoint}} -->
+                {% for appointment in today_appoint %}
+                <tr>
+                    <td>{{ appointment.task }}</td>
+                    <td>{{ appointment.time }}</td>
+                    <td>{{ appointment.status }}</td>
+                    {% if appointment.status != 'Done' %}
+                    <td>
+                        <div class="row">
+                            <div class="three columns">
+                                <form class="edit" action="/update/{{ appointment.id }}" method="post">
+                                    {% csrf_token %}
+                                    <input type="submit" name="edit" value="Edit">
+                                </form>
+                            </div>
+                            <div class="three columns">
+                                <form class="delete" action="/delete/{{ appointment.id }}" method="post">
+                                    {% csrf_token %}
+                                    <input type="submit" name="delete" value="Delete">
+                                </form>
+                            </div>
+                        </div>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+        <br>
+    <div class="container">
+        <h4>Your Other Appointments:</h4>
+        <table>
+            <thead>
+                <th>Task</th>
+                <th>Date</th>
+                <th>Time</th>
+            </thead>
+            <tbody>
+                {%for appointment in appointments%}
+                <tr>
+                    <td>{{appointment.task}}</td>
+                    <td>{{appointment.date}}</td>
+                    <td>{{appointment.time}}</td>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+        <br>
+        <div class="container">
+            <h2>Add Appointment</h2>
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                <li style="color:red">{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            <form action="/add" class="col s12" method="POST">
+                {% csrf_token %}
+              <div class="row">
+                <div class="input-field col s6">
+                  <input id="date" type="date" class="validate" name="date">
+                  Date
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="time" type="time" class="validate" name="time">
+                  Time
+                </div>
+              </div>
+              <div class="row">
+                <div class="input-field col s12">
+                  <input id="task" type="text" class="validate" name="task">
+                  <label for="task">Task</label>
+                </div>
+              </div>
+              <input type="submit" name="add" value="Add">
+          </form>
+        </div>
+        <br>
+        <br>
+    </div>
+  </body>
+</html>

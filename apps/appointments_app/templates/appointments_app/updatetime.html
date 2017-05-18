@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Update Appointment</title>
+        <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/js/materialize.min.js"></script> -->
+         {% load humanize %}
+    </head>
+
+    <body>
+        <h5 style="text-align: right"><a href="/logout" style="margin: 20px">Log out</a> | <a href="/appoint" style="margin: 20px">DashBoard</a></h5>
+        <div class="container" style= "margin:80px">
+            <h2>Update Appointment</h2>
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                <li style="color:red">{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            <form action="/edit_appoint/{{appointment.id}}" class="col s12" method="POST">
+                {% csrf_token %}
+              <div class="row">
+                <div class="input-field col s6">
+                <label for="task">Task</label>
+                  <input id="task" type="text" class="validate" name="edit_tasks" value="{{appointment.task}}">
+                </div>
+              </div>
+              <br>
+              <div class="dropdown">
+                  <label for="status">Status</label>
+                  <select id="status" name="edit_status">
+                      <option value="Pending">Pending</option>
+                      <option value="Done">Done</option>
+                      <option value="Missed">Missed</option>
+                  </select>
+              </div>
+              <br>
+              <div class="row">
+                <div class="input-field col s12">
+                <label for="date">Date</label>
+                  <input id="date" type="date" class="validate" name="edit_date" value="{{appointment.date}}">
+                </div>
+              </div>
+              <br>
+              <div class="row">
+                <div class="input-field col s12">
+                <label for="time">Time</label>
+                  <input id="time" type="time" class="validate" name="edit_time" value= "{{appointment.time}}">
+                </div>
+              </div>
+              <br>
+              <input type="submit" name="update" value="Update">
+          </form>
+      </div>
+    </body>
+</html>
